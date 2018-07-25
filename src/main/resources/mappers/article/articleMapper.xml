@@ -11,15 +11,11 @@
             , title
             , content
             , writer
-            , regdate
-            , viewcnt
         ) VALUES (
             #{articleNo}
             , #{title}
             , #{content}
             , #{writer}
-            , #{regDate}
-            , #{viewCnt}
         )
     </insert>
 
@@ -29,8 +25,8 @@
             , title
             , content
             , writer
-            , regdate
-            , viewcnt
+            , reg_date
+            , view_cnt
         FROM
             tbl_article
         WHERE article_no = #{articleNo}
@@ -53,22 +49,16 @@
     <select id="listAll" resultMap="ArticleResultMap">
         <![CDATA[
 
-
-
-
         SELECT
             article_no,
             title,
             content,
             writer,
-            regdate,
-            viewcnt
+            reg_date,
+            view_cnt
         FROM tbl_article
         WHERE article_no > 0
-        ORDER BY article_no DESC, regdate DESC
-
-
-
+        ORDER BY article_no DESC, reg_date DESC
 
         ]]>
     </select>
@@ -76,23 +66,17 @@
     <select id="listPaging" resultMap="ArticleResultMap">
     <![CDATA[
 
-
-
-
         SELECT
            article_no,
            title,
            content,
            writer,
-           regdate,
-           viewcnt
+           reg_date,
+           view_cnt
         FROM tbl_article
         WHERE article_no > 0
-        ORDER BY article_no DESC, regdate DESC
+        ORDER BY article_no DESC, reg_date DESC
         LIMIT #{page}, 10
-
-
-
 
         ]]>
     </select>
@@ -100,22 +84,18 @@
     <select id="listCriteria" resultMap="ArticleResultMap">
     <![CDATA[
 
-
-
         SELECT
           article_no,
           title,
           content,
           writer,
-          regdate,
-          viewcnt
+          reg_date,
+          view_cnt,
+          reply_cnt
         FROM tbl_article
         WHERE article_no > 0
-        ORDER BY article_no DESC, regdate DESC
+        ORDER BY article_no DESC, reg_date DESC
         LIMIT #{pageStart}, #{perPageNum}
-
-
-
 
         ]]>
     </select>
@@ -123,14 +103,10 @@
     <select id="countArticles" resultType="int">
     <![CDATA[
 
-
-
     SELECT
         COUNT(article_no)
     FROM tbl_article
     WHERE article_no > 0
-
-
 
         ]]>
     </select>
@@ -142,14 +118,15 @@
         title,
         content,
         writer,
-        regdate,
-        viewcnt
+        reg_date,
+        view_cnt,
+        reply_cnt
     FROM tbl_article
     WHERE article_no > 0
     ]]>
         <include refid="search"/>
         <![CDATA[
-    ORDER BY article_no DESC, regdate DESC
+    ORDER BY article_no DESC, reg_date DESC
     LIMIT #{pageStart}, #{perPageNum}
     ]]>
     </select>
@@ -214,8 +191,8 @@
         <result property="title" column="title"/>
         <result property="content" column="content"/>
         <result property="writer" column="writer"/>
-        <result property="regDate" column="regdate"/>
-        <result property="viewCnt" column="viewcnt"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="viewCnt" column="view_cnt"/>
         <result property="replyCnt" column="reply_cnt" />
     </resultMap>
 
