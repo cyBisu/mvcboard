@@ -35,42 +35,42 @@ public class ReplyDAOTest {
 
     }
 
-    @Test
-    public void testReplyList() throws Exception {
-
-        logger.info(replyDAO.list(1000).toString());
-
-    }
-
-    @Test
-    public void testReplyUpdate() throws Exception {
-
-        ReplyVO replyVO = new ReplyVO();
-        replyVO.setArticleNo(2);
-        replyVO.setReplyText(2+"번째 댓글 수정...");
-        replyDAO.update(replyVO);
-
-    }
-
-    @Test
-    public void testReplyDelete() throws Exception {
-
-        replyDAO.delete(3);
-
-    }
-
-    @Test
-    public void testReplyPaging() throws Exception {
-
-        Criteria criteria = new Criteria();
-        criteria.setPerPageNum(20);
-        criteria.setPage(1);
-
-        List<ReplyVO> replies = replyDAO.listPaging(1000, criteria);
-
-        for (ReplyVO reply : replies) {
-            logger.info(reply.getReplyNo() + " : " + reply.getReplyText());
-        }
-
-    }
+//    @Test
+//    public void testReplyList() throws Exception {
+//
+//        logger.info(replyDAO.list(1000).toString());
+//
+//    }
+//
+//    @Test
+//    public void testReplyUpdate() throws Exception {
+//
+//        ReplyVO replyVO = new ReplyVO();
+//        replyVO.setArticleNo(2);
+//        replyVO.setReplyText(2+"번째 댓글 수정...");
+//        replyDAO.update(replyVO);
+//
+//    }
+//
+//    @Test
+//    public void testReplyDelete() throws Exception {
+//
+//        replyDAO.delete(3);
+//
+//    }
+//
+//    @Test
+//    public void testReplyPaging() throws Exception {
+//
+//        Criteria criteria = new Criteria();
+//        criteria.setPerPageNum(20);
+//        criteria.setPage(1);
+//
+//        List<ReplyVO> replies = replyDAO.listPaging(1000, criteria);
+//
+//        for (ReplyVO reply : replies) {
+//            logger.info(reply.getReplyNo() + " : " + reply.getReplyText());
+//        }
+//
+//    }
 }

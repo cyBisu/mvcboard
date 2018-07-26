@@ -9,6 +9,8 @@
 <script src="/dist/js/adminlte.min.js"></script>
 <!-- Handlebar -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+<%--lightbox js--%>
+<script src="/bower_components/lightbox/js/lightbox.js"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
 Both of these plugins are recommended to enhance the

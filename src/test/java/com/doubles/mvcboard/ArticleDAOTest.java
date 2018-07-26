@@ -24,19 +24,19 @@ public class ArticleDAOTest {
     @Inject
     private ArticleDAO articleDAO;
 
-//    @Test
-//    public void testCreate() throws Exception {
-//        for (int i = 1; i <= 1000; i++) {
-//            ArticleVO articleVO = new ArticleVO();
-//            articleVO.setTitle(i + "번째 글 제목입니다...");
-//            articleVO.setContent(i + "번재 글 내용입니다...");
-//            articleVO.setWriter("user0" + (i % 10));
-//
-//            articleDAO.create(articleVO);
-//        }
-//    }
-//
-    //    @Test
+    @Test
+    public void testCreate() throws Exception {
+        for (int i = 1; i <= 1000; i++) {
+            ArticleVO articleVO = new ArticleVO();
+            articleVO.setTitle(i + "번째 글 제목입니다...");
+            articleVO.setContent(i + "번재 글 내용입니다...");
+            articleVO.setWriter("user0" + (i % 10));
+
+            articleDAO.create(articleVO);
+        }
+    }
+
+//        @Test
 //    public void testRead() throws Exception {
 //        logger.info(articleDAO.read(1).toString());
 //    }
@@ -109,27 +109,27 @@ public class ArticleDAOTest {
 //        logger.info(uriComponents.toString());
 //
 //    }
-
-    @Test
-    public void testDynamic1() throws Exception {
-
-        SearchCriteria searchCriteria = new SearchCriteria();
-        searchCriteria.setPage(1);
-        searchCriteria.setKeyword("999");
-        searchCriteria.setSearchType("t");
-
-        logger.info("======================");
-
-        List<ArticleVO> articles = articleDAO.listSearch(searchCriteria);
-
-        for (ArticleVO article : articles) {
-            logger.info(article.getArticleNo() + " : " + article.getTitle());
-        }
-
-        logger.info("======================");
-
-        logger.info("searched articles count : " + articleDAO.countSearchedArticles(searchCriteria));
-    }
+//
+//    @Test
+//    public void testDynamic1() throws Exception {
+//
+//        SearchCriteria searchCriteria = new SearchCriteria();
+//        searchCriteria.setPage(1);
+//        searchCriteria.setKeyword("999");
+//        searchCriteria.setSearchType("t");
+//
+//        logger.info("======================");
+//
+//        List<ArticleVO> articles = articleDAO.listSearch(searchCriteria);
+//
+//        for (ArticleVO article : articles) {
+//            logger.info(article.getArticleNo() + " : " + article.getTitle());
+//        }
+//
+//        logger.info("======================");
+//
+//        logger.info("searched articles count : " + articleDAO.countSearchedArticles(searchCriteria));
+//    }
 
 
 }

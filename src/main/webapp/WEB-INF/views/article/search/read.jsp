@@ -38,6 +38,12 @@
                     <div class="box-body" style="height: 700px">
                         ${article.content}
                     </div>
+
+                    <%--업로드 파일 정보 영역--%>
+                    <div class="box-footer uploadFiles">
+                        <ul class="mailbox-attachments clearfix uploadedFileList"></ul>
+                    </div>
+
                     <div class="box-footer">
                         <div class="user-block">
                             <img class="img-circle img-bordered-sm" src="/dist/img/user1-128x128.jpg" alt="user image">
@@ -62,12 +68,11 @@
                             <button type="submit" class="btn btn-danger delBtn"><i class="fa fa-trash"></i> 삭제</button>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="box box-warning">
                     <div class="box-header with-border">
-                        <a class="link-black text-lg"><i class="fa fa-pencil"></i> 댓글작성</a>
+                        <a class="link-black text-lg"><i class="fa fa-pencil margin-r-5"></i> 댓글작성</a>
                     </div>
                     <div class="box-body">
                         <form class="form-horizontal">
@@ -93,7 +98,7 @@
                 <div class="box box-success collapsed-box">
                     <%--댓글 유무 / 댓글 갯수 / 댓글 펼치기, 접기--%>
                     <div class="box-header with-border">
-                        <a href="" class="link-black text-lg"><i class="fa fa-comments-o margin-r-5 replyCount"></i></a>
+                        <a class="link-black text-lg"><i class="fa fa-comments-o margin-r-5 replyCount"></i> </a>
                         <div class="box-tools">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse">
                                 <i class="fa fa-plus"></i>
@@ -176,111 +181,55 @@
     {{#each.}}
     <div class="post replyDiv" data-replyNo={{replyNo}}>
         <div class="user-block">
+            <%--댓글 작성자 프로필사진 : 추후 이미지 업로드기능 구현 예정--%>
             <img class="img-circle img-bordered-sm" src="/dist/img/user1-128x128.jpg" alt="user image">
+            <%--댓글 작성자--%>
             <span class="username">
+                <%--작성자 이름--%>
                 <a href="#">{{replyWriter}}</a>
+                <%--댓글 삭제 버튼--%>
                 <a href="#" class="pull-right btn-box-tool replyDelBtn" data-toggle="modal" data-target="#delModal">
                     <i class="fa fa-times"> 삭제</i>
                 </a>
+                <%--댓글 수정 버튼--%>
                 <a href="#" class="pull-right btn-box-tool replyModBtn" data-toggle="modal" data-target="#modModal">
                     <i class="fa fa-edit"> 수정</i>
                 </a>
             </span>
+            <%--댓글 작성일자--%>
             <span class="description">{{prettifyDate regDate}}</span>
         </div>
+        <%--댓글 내용--%>
         <div class="oldReplyText">{{{escape replyText}}}</div>
         <br/>
     </div>
     {{/each}}
 </script>
+<script id="fileTemplate" type="text/x-handlebars-template">
+    <li data-src="{{fullName}}">
+        <span class="mailbox-attachment-icon has-img">
+            <img src="{{imgSrc}}" alt="Attachment">
+        </span>
+        <div class="mailbox-attachment-info">
+            <a href="{{originalFileUrl}}" class="mailbox-attachment-name">
+                <i class="fa fa-paperclip"></i> {{originalFileName}}
+            </a>
+        </div>
+    </li>
+</script>
+<script type="text/javascript" src="/resources/dist/js/article_file_upload.js"></script>
+<script type="text/javascript" src="/resources/dist/js/reply.js"></script>
 <script>
     $(document).ready(function () {
 
         var articleNo = "${article.articleNo}";  // 현재 게시글 번호
         var replyPageNum = 1; // 댓글 페이지 번호 초기화
 
-        // 댓글 내용 : 줄바꿈/공백처리
-        Handlebars.registerHelper("escape", function (replyText) {
-            var text = Handlebars.Utils.escapeExpression(replyText);
-            text = text.replace(/(\r\n|\n|\r)/gm, "<br/>");
-            text = text.replace(/( )/gm, "&nbsp;");
-            return new Handlebars.SafeString(text);
-        });
-
-        // 댓글 등록일자 : 날짜/시간 2자리로 맞추기
-        Handlebars.registerHelper("prettifyDate", function (timeValue) {
-            var dateObj = new Date(timeValue);
-            var year = dateObj.getFullYear();
-            var month = dateObj.getMonth() + 1;
-            var date = dateObj.getDate();
-            var hours = dateObj.getHours();
-            var minutes = dateObj.getMinutes();
-            // 2자리 숫자로 변환
-            month < 10 ? month = '0' + month : month;
-            date < 10 ? date = '0' + date : date;
-            hours < 10 ? hours = '0' + hours : hours;
-            minutes < 10 ? minutes = '0' + minutes : minutes;
-            return year + "-" + month + "-" + date + " " + hours + ":" + minutes;
-        });
+        // 첨부파일 목록
+        getFiles(articleNo);
 
         // 댓글 목록 함수 호출
         getReplies("/replies/" + articleNo + "/" + replyPageNum);
-
-        // 댓글 목록 함수
-        function getReplies(repliesUri) {
-            $.getJSON(repliesUri, function (data) {
-                printReplyCount(data.pageMaker.totalCount);
-                printReplies(data.replies, $(".repliesDiv"), $("#replyTemplate"));
-                printReplyPaging(data.pageMaker, $(".pagination"));
-            });
-        }
-
-        // 댓글 갯수 출력 함수
-        function printReplyCount(totalCount) {
-
-            var replyCount = $(".replyCount");
-            var collapsedBox = $(".collapsed-box");
-
-            // 댓글이 없으면
-            if (totalCount === 0) {
-                replyCount.html(" 댓글이 없습니다. 의견을 남겨주세요");
-                collapsedBox.find(".btn-box-tool").remove();
-                return;
-            }
-
-            // 댓글이 존재하면
-            replyCount.html(" 댓글목록 (" + totalCount + ")");
-            collapsedBox.find(".box-tools").html(
-                "<button type='button' class='btn btn-box-tool' data-widget='collapse'>"
-                + "<i class='fa fa-plus'></i>"
-                + "</button>"
-            );
-
-        }
-
-        // 댓글 목록 출력 함수
-        function printReplies(replyArr, targetArea, templateObj) {
-            var replyTemplate = Handlebars.compile(templateObj.html());
-            var html = replyTemplate(replyArr);
-            $(".replyDiv").remove();
-            targetArea.html(html);
-        }
-
-        // 댓글 페이징 출력 함수
-        function printReplyPaging(pageMaker, targetArea) {
-            var str = "";
-            if (pageMaker.prev) {
-                str += "<li><a href='" + (pageMaker.startPage - 1) + "'>이전</a></li>";
-            }
-            for (var i = pageMaker.startPage, len = pageMaker.endPage; i <= len; i++) {
-                var strClass = pageMaker.criteria.page == i ? "class=active" : "";
-                str += "<li " + strClass + "><a href='" + i + "'>" + i + "</a></li>";
-            }
-            if (pageMaker.next) {
-                str += "<li><a href='" + (pageMaker.endPage + 1) + "'>다음</a></li>";
-            }
-            targetArea.html(str);
-        }
 
         // 댓글 페이지 번호 클릭 이벤트
         $(".pagination").on("click", "li a", function (event) {
@@ -380,7 +329,6 @@
             });
         });
 
-
         var formObj = $("form[role='form']");
         console.log(formObj);
 
@@ -391,17 +339,36 @@
         });
 
         $(".delBtn").on("click", function () {
+
+            var replyCnt = $(".replyDiv").length;
+            if (replyCnt > 0) {
+                alert("댓글이 달린 게시글은 삭제할수 없습니다.");
+                return;
+            }
+
+            var arr = [];
+            $(".uploadedFileList li").each(function () {
+                arr.push($(this).attr("data-src"));
+            });
+
+            if (arr.length > 0) {
+                $.post("/article/file/deleteAll", {files: arr}, function () {
+
+                });
+            }
+
             formObj.attr("action", "/article/paging/search/remove");
             formObj.submit();
         });
 
         $(".listBtn").on("click", function () {
-            formObj.attr("method", "get");
             formObj.attr("action", "/article/paging/search/list");
+            formObj.attr("method", "get");
             formObj.submit();
-
         });
+
     });
 </script>
+
 </body>
 </html>

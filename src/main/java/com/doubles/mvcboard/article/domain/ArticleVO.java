@@ -1,21 +1,21 @@
 package com.doubles.mvcboard.article.domain;
 
+import java.util.Arrays;
 import java.util.Date;
 
 public class ArticleVO {
+
     private Integer articleNo;
-
     private String title;
-
     private String content;
-
     private String writer;
-
     private Date regDate;
-
     private int viewCnt;
-
     private int replyCnt;
+
+    private String[] files;
+    private int fileCnt;
+
 
     public Integer getArticleNo() {
         return articleNo;
@@ -73,6 +73,23 @@ public class ArticleVO {
         this.replyCnt = replyCnt;
     }
 
+    public String[] getFiles() {
+        return files;
+    }
+
+    public void setFiles(String[] files) {
+        this.files = files;
+        setFileCnt(files.length);
+    }
+
+    public int getFileCnt() {
+        return fileCnt;
+    }
+
+    private void setFileCnt(int fileCnt) {
+        this.fileCnt = fileCnt;
+    }
+
     @Override
     public String toString() {
         return "ArticleVO{" +
@@ -83,6 +100,8 @@ public class ArticleVO {
                 ", regDate=" + regDate +
                 ", viewCnt=" + viewCnt +
                 ", replyCnt=" + replyCnt +
+                ", files=" + Arrays.toString(files) +
+                ", fileCnt=" + fileCnt +
                 '}';
     }
 }

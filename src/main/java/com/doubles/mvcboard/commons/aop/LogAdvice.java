@@ -35,7 +35,7 @@ public class LogAdvice {
             name = "Service : ";
 
         } else if (type.contains("DAO")) {
-            name = "Persistence : ";
+            name = "persistence : ";
         }
 
         long end = System.currentTimeMillis();
