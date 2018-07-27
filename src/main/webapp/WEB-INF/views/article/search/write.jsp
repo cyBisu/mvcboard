@@ -108,19 +108,23 @@
 </script>
 <script type="text/javascript" src="/resources/dist/js/article_file_upload.js"></script>
 <script>
+
     $(document).ready(function () {
+
         // 게시글 저장 버튼 클릭 이벤트 처리
         $("#writeForm").submit(function (event) {
             event.preventDefault();
             var that = $(this);
             filesSubmit(that);
         });
+
         // 파일 삭제 버튼 클릭 이벤트
         $(document).on("click", ".delBtn", function (event) {
             event.preventDefault();
             var that = $(this);
             deleteFileWrtPage(that);
         });
+
         // 목록 버튼 클릭 이벤트 처리
         $(".listBtn").on("click", function () {
             self.location = "/article/paging/search/list?page=${searchCriteria.page}"
@@ -128,7 +132,9 @@
                 + "&searchType=${searchCriteria.searchType}"
                 + "&keyword=${searchCriteria.keyword}";
         });
+
     });
+
 </script>
 </body>
 </html>
